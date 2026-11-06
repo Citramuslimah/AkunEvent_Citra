@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="Dashboard sistem informasi akuntansi AkunEvent">
+  <title>Dashboard | AkunEvent</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body data-protected-page="true">
+  <aside class="sidebar">
+    <a class="brand" href="dashboard.html#dashboard" aria-label="AkunEvent by Citra">
+      <span class="brand-name">AkunEvent</span>
+      <span class="brand-byline">by Citra</span>
+    </a>
+    <nav class="navigation" aria-label="Navigasi utama">
+      <a class="nav-link is-active" href="#dashboard" data-view="dashboard" aria-current="page">Dashboard</a>
+      <a class="nav-link" href="#events" data-view="events">Acara</a>
+      <a class="nav-link" href="#income" data-view="income">Pendapatan</a>
+      <a class="nav-link" href="#funding" data-view="funding">Pendanaan</a>
+      <a class="nav-link" href="#expense" data-view="expense">Pengeluaran</a>
+      <a class="nav-link" href="jurnal.html">Jurnal Umum</a>
+    </nav>
+    <div class="sidebar-footer"><span class="status-dot" aria-hidden="true"></span><span id="connection-status">Memeriksa sesi</span></div>
+  </aside>
+
+  <main class="main-content">
+    <header class="topbar">
+      <div><p class="topbar-label">SISTEM INFORMASI AKUNTANSI</p><p class="breadcrumb" id="breadcrumb">Dashboard</p></div>
+      <div class="account-actions">
+        <span class="user-role" id="user-role" hidden></span>
+        <button class="button button-quiet button-small" id="signout-button" type="button" hidden>Keluar</button>
+      </div>
+    </header>
+    <div class="notice" id="app-notice" role="status" aria-live="polite" hidden></div>
+
+    <section class="view-page" id="view-dashboard" aria-labelledby="dashboard-title">
+      <div class="page-heading">
+        <div><p class="eyebrow">RINGKASAN KEUANGAN</p><h1 id="dashboard-title">Dashboard</h1><p class="page-description">Ringkasan kas dan aktivitas keuangan acara.</p></div>
+        <button class="button button-primary" type="button" data-go="events">+ Catat acara</button>
+      </div>
+      <div class="metric-grid">
+        <article class="metric-card"><p>Total acara</p><strong id="metric-events">0</strong><span>terdaftar dalam sistem</span></article>
+        <article class="metric-card"><p>Kategori acara</p><strong id="metric-categories">0</strong><span>jenis kegiatan</span></article>
+        <article class="metric-card"><p>Total pendanaan</p><strong id="metric-funding">Rp0</strong><span>seluruh periode</span></article>
+        <article class="metric-card"><p>Pendapatan jasa bersih</p><strong id="metric-income">Rp0</strong><span>setelah refund pelunasan</span></article>
+        <article class="metric-card"><p>Total pengeluaran</p><strong id="metric-expense">Rp0</strong><span>biaya acara tercatat</span></article>
+        <article class="metric-card metric-cash"><p>Saldo kas</p><strong id="metric-cash">Rp0</strong><span>kas masuk dikurangi keluar</span></article>
+      </div>
+      <div class="dashboard-grid">
+        <section class="panel cashflow-panel" aria-labelledby="cashflow-title">
+          <div class="panel-heading">
+            <div><h2 id="cashflow-title">Ringkasan arus dana</h2><p>Pendanaan, pendapatan, dan pengeluaran enam bulan terakhir.</p></div>
+            <div class="chart-legend" aria-label="Legenda grafik">
+              <span><i class="legend-swatch funding-swatch" aria-hidden="true"></i>Pendanaan</span>
+              <span><i class="legend-swatch income-swatch" aria-hidden="true"></i>Pendapatan</span>
+              <span><i class="legend-swatch expense-swatch" aria-hidden="true"></i>Pengeluaran</span>
+            </div>
+          </div>
+          <div class="cashflow-chart" id="cashflow-chart" role="img" aria-label="Grafik arus dana enam bulan terakhir"></div>
+          <div class="chart-summary">
+            <p id="cashflow-period">Enam bulan terakhir</p>
+            <div>
+              <span>Total pendanaan <strong id="cashflow-funding-total">Rp0</strong></span>
+              <span>Kas pendapatan bersih <strong id="cashflow-income-total">Rp0</strong></span>
+              <span>Total pengeluaran <strong id="cashflow-expense-total">Rp0</strong></span>
+            </div>
+          </div>
+        </section>
+        <section class="panel agenda-panel" aria-labelledby="agenda-title">
+          <div class="panel-heading"><div><h2 id="agenda-title">Agenda acara</h2><p id="agenda-description">Kegiatan yang perlu dipantau</p></div><button class="text-button" type="button" data-go="events">Semua acara <span aria-hidden="true">→</span></button></div>
+          <div class="agenda-list" id="agenda-events"><p class="empty-state">Belum ada acara.</p></div>
+        </section>
+      </div>
+      <section class="panel recent-panel" aria-labelledby="recent-title">
+        <div class="panel-heading"><div><h2 id="recent-title">Transaksi terbaru</h2><p>Aktivitas keuangan yang baru dicatat.</p></div><a class="text-button" href="jurnal.html">Lihat jurnal <span aria-hidden="true">→</span></a></div>
+        <div class="table-scroll"><table><thead><tr><th>Tanggal</th><th>Acara</th><th>Jenis</th><th>Uraian</th><th class="numeric">Nominal</th></tr></thead><tbody id="recent-transactions"><tr><td colspan="5" class="empty-state">Memuat data...</td></tr></tbody></table></div>
+      </section>
+    </section>
+
+    <section class="view-page" id="view-events" aria-labelledby="events-title" hidden>
+      <div class="page-heading"><div><p class="eyebrow">DATA KEGIATAN</p><h1 id="events-title">Acara</h1><p class="page-description">Kelola acara dan klien yang terkait dengan transaksi.</p></div></div>
+      <section class="panel form-panel" aria-labelledby="event-form-title">
+        <div class="panel-heading"><div><h2 id="event-form-title">Tambah acara</h2><p>Daftarkan acara sebelum mencatat transaksi.</p></div></div>
+        <form class="form-grid" id="event-form" method="post">
+          <label>Kategori<select name="category_id" id="event-category" required><option value="">Pilih kategori</option></select></label>
+          <label>Nama acara<input name="name" type="text" maxlength="160" placeholder="Contoh: Konferensi Tahunan" required></label>
+          <label>Nama klien<input name="client_name" type="text" maxlength="160" placeholder="Nama perusahaan atau klien" required></label>
+          <label>Tanggal acara<input name="event_date" type="date" required></label>
+          <div class="form-actions"><button class="button button-primary" type="submit">Simpan acara</button></div>
+        </form>
+      </section>
+      <section class="panel" aria-labelledby="events-list-title">
+        <div class="panel-heading"><div><h2 id="events-list-title">Daftar acara</h2><p>Menghapus acara juga menghapus transaksi yang terkait.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Acara</th><th>Kategori</th><th>Klien</th><th>Tanggal acara</th><th>Diinput Oleh</th><th class="admin-only" hidden>Aksi</th></tr></thead><tbody id="events-rows"><tr><td colspan="5" class="empty-state">Memuat data...</td></tr></tbody></table></div>
+      </section>
+    </section>
+
+    <section class="view-page" id="view-income" aria-labelledby="income-title" hidden>
+      <div class="page-heading"><div><p class="eyebrow">PENERIMAAN KLIEN</p><h1 id="income-title">Pendapatan</h1><p class="page-description">Catat uang muka, pelunasan, atau pengembalian dana.</p></div></div>
+      <section class="panel form-panel" aria-labelledby="income-form-title">
+        <div class="panel-heading"><div><h2 id="income-form-title">Catat transaksi pendapatan</h2><p>Pengguna yang sedang masuk dicatat otomatis sebagai penginput.</p></div></div>
+        <form class="form-grid" id="income-form" method="post">
+          <label>Acara<select name="event_id" data-event-options required><option value="">Pilih acara</option></select></label>
+          <label>Jenis pembayaran<select name="payment_type" id="payment-type" required><option value="">Pilih jenis</option><option value="dp">DP / Uang muka</option><option value="pelunasan">Pelunasan</option><option value="refund">Refund</option></select></label>
+          <label id="refund-source-field" hidden>Refund untuk transaksi<select name="related_transaction_id" id="refund-source"><option value="">Pilih transaksi asal</option></select></label>
+          <label>Uraian<input name="description" type="text" maxlength="240" placeholder="Contoh: Uang muka paket acara" required></label>
+          <label>Nominal (Rp)<input name="amount" type="number" min="1" step="0.01" placeholder="0" required></label>
+          <label>Tanggal<input name="transaction_date" type="date" required></label>
+          <div class="form-actions"><button class="button button-primary" type="submit">Simpan transaksi</button></div>
+        </form>
+      </section>
+      <section class="panel" aria-labelledby="income-list-title">
+        <div class="panel-heading"><div><h2 id="income-list-title">Riwayat pendapatan</h2><p>Kas bersih menghitung DP dan pelunasan dikurangi refund.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Tanggal</th><th>Acara</th><th>Jenis</th><th>Uraian</th><th class="numeric">Nominal</th><th>Diinput Oleh</th><th class="admin-only" hidden>Aksi</th></tr></thead><tbody id="income-rows"><tr><td colspan="6" class="empty-state">Memuat data...</td></tr></tbody><tfoot><tr><th colspan="4">Kas bersih diterima</th><th class="numeric" id="income-total">Rp0</th><th></th><th class="admin-only" hidden></th></tr></tfoot></table></div>
+      </section>
+    </section>
+
+    <section class="view-page" id="view-funding" aria-labelledby="funding-title" hidden>
+      <div class="page-heading"><div><p class="eyebrow">KAS MASUK</p><h1 id="funding-title">Pendanaan</h1><p class="page-description">Catat dana sponsor atau pendanaan lainnya.</p></div></div>
+      <section class="panel form-panel" aria-labelledby="funding-form-title">
+        <div class="panel-heading"><div><h2 id="funding-form-title">Catat pendanaan</h2><p>Pengguna yang sedang masuk dicatat otomatis sebagai penginput.</p></div></div>
+        <form class="form-grid" id="funding-form" method="post">
+          <label>Acara<select name="event_id" data-event-options required><option value="">Pilih acara</option></select></label>
+          <label>Sumber / uraian<input name="description" type="text" maxlength="240" placeholder="Contoh: Sponsor utama" required></label>
+          <label>Nominal (Rp)<input name="amount" type="number" min="1" step="0.01" placeholder="0" required></label>
+          <label>Tanggal<input name="transaction_date" type="date" required></label>
+          <div class="form-actions"><button class="button button-primary" type="submit">Simpan pendanaan</button></div>
+        </form>
+      </section>
+      <section class="panel" aria-labelledby="funding-list-title">
+        <div class="panel-heading"><div><h2 id="funding-list-title">Riwayat pendanaan</h2><p>Seluruh dana yang diterima.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Tanggal</th><th>Acara</th><th>Sumber</th><th class="numeric">Nominal</th><th>Diinput Oleh</th><th class="admin-only" hidden>Aksi</th></tr></thead><tbody id="funding-rows"><tr><td colspan="5" class="empty-state">Memuat data...</td></tr></tbody><tfoot><tr><th colspan="3">Total pendanaan</th><th class="numeric" id="funding-total">Rp0</th><th></th><th class="admin-only" hidden></th></tr></tfoot></table></div>
+      </section>
+    </section>
+
+    <section class="view-page" id="view-expense" aria-labelledby="expense-title" hidden>
+      <div class="page-heading"><div><p class="eyebrow">KAS KELUAR</p><h1 id="expense-title">Pengeluaran</h1><p class="page-description">Catat biaya operasional dan biaya pelaksanaan setiap acara.</p></div></div>
+      <section class="panel form-panel" aria-labelledby="expense-form-title">
+        <div class="panel-heading"><div><h2 id="expense-form-title">Catat pengeluaran</h2><p>Pengguna yang sedang masuk dicatat otomatis sebagai penginput.</p></div></div>
+        <form class="form-grid" id="expense-form" method="post">
+          <label>Acara<select name="event_id" data-event-options required><option value="">Pilih acara</option></select></label>
+          <label>Kategori Beban<select name="account_category" required><option value="">Pilih kategori beban</option><option value="listrik_air">Beban Listrik &amp; Air</option><option value="operasional">Beban Operasional/Vendor</option><option value="utang_usaha">Pembayaran Utang</option><option value="gaji">Beban Gaji Karyawan</option></select></label>
+          <label>Keperluan / uraian<input name="description" type="text" maxlength="240" placeholder="Contoh: Sewa sound system" required></label>
+          <label>Nominal (Rp)<input name="amount" type="number" min="1" step="0.01" placeholder="0" required></label>
+          <label>Tanggal<input name="transaction_date" type="date" required></label>
+          <div class="form-actions"><button class="button button-primary" type="submit">Simpan pengeluaran</button></div>
+        </form>
+      </section>
+      <section class="panel" aria-labelledby="expense-list-title">
+        <div class="panel-heading"><div><h2 id="expense-list-title">Riwayat pengeluaran</h2><p>Seluruh biaya yang telah dikeluarkan.</p></div></div>
+        <div class="table-scroll"><table><thead><tr><th>Tanggal</th><th>Acara</th><th>Keperluan</th><th class="numeric">Nominal</th><th>Diinput Oleh</th><th class="admin-only" hidden>Aksi</th></tr></thead><tbody id="expense-rows"><tr><td colspan="5" class="empty-state">Memuat data...</td></tr></tbody><tfoot><tr><th colspan="3">Total pengeluaran</th><th class="numeric" id="expense-total">Rp0</th><th></th><th class="admin-only" hidden></th></tr></tfoot></table></div>
+      </section>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="../backend/supabase.js"></script>
+  <script src="auth.js"></script>
+  <script src="transactions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
